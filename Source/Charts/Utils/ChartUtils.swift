@@ -223,7 +223,6 @@ extension CGContext
 
             (text as NSString).draw(at: drawOffset, withAttributes: attributes)
         }
-
         NSUIGraphicsPopContext()
     }
 

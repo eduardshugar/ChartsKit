@@ -356,6 +356,7 @@ open class PieChartRenderer: NSObject, DataRenderer
             let lineHeight = valueFont.lineHeight
             
             let formatter = dataSet.valueFormatter
+            var previous: CGPoint = .zero
             
             for j in 0 ..< dataSet.entryCount
             {
@@ -421,9 +422,9 @@ open class PieChartRenderer: NSObject, DataRenderer
                         line1Radius = radius * valueLinePart1OffsetPercentage
                     }
 
-                    let polyline2Length = dataSet.valueLineVariableLength
-                        ? labelRadius * valueLineLength2 * abs(sin(transformedAngle.DEG2RAD))
-                        : labelRadius * valueLineLength2
+                    let polyline2Length = 0.0 //dataSet.valueLineVariableLength
+//                        ? labelRadius * valueLineLength2 * abs(sin(transformedAngle.DEG2RAD))
+//                        : labelRadius * valueLineLength2
 
                     let pt0 = CGPoint(
                         x: line1Radius * sliceXBase + center.x,
@@ -436,15 +437,33 @@ open class PieChartRenderer: NSObject, DataRenderer
                     if transformedAngle.truncatingRemainder(dividingBy: 360.0) >= 90.0 && transformedAngle.truncatingRemainder(dividingBy: 360.0) <= 270.0
                     {
                         pt2 = CGPoint(x: pt1.x - polyline2Length, y: pt1.y)
-                        align = .right
+                        align = .center
                         labelPoint = CGPoint(x: pt2.x - 5, y: pt2.y - lineHeight)
                     }
                     else
                     {
                         pt2 = CGPoint(x: pt1.x + polyline2Length, y: pt1.y)
-                        align = .left
+                        align = .center
                         labelPoint = CGPoint(x: pt2.x + 5, y: pt2.y - lineHeight)
                     }
+                                        
+                    let previousFrame = CGRect(x: previous.x, y: previous.y, width: 24, height: lineHeight)
+                    let currentFrame = CGRect(x: labelPoint.x, y: labelPoint.y, width: 24, height: lineHeight)
+
+                    if currentFrame.intersects(previousFrame) {
+                        if previous.x + 24 >= labelPoint.x {
+                            labelPoint = CGPoint(x: labelPoint.x + 16, y: labelPoint.y)
+                        } else {
+                            labelPoint = CGPoint(x: labelPoint.x, y: labelPoint.y + lineHeight + 4)
+                        }
+                    } else if j == 0,
+                              let last = dataSet.entryForIndex(dataSet.entryCount-1),
+                              last.y / yValueSum * 100.0 < 5,
+                              e.y / yValueSum * 100.0 < 5 {
+                        labelPoint = CGPoint(x: labelPoint.x + 20, y: labelPoint.y)
+                    }
+
+                    previous = labelPoint
 
                     DrawLine: do
                     {
