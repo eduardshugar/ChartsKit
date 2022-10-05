@@ -451,7 +451,7 @@ open class PieChartRenderer: NSObject, DataRenderer
                     let currentFrame = CGRect(x: labelPoint.x, y: labelPoint.y, width: 24, height: lineHeight)
 
                     if currentFrame.intersects(previousFrame) {
-                        if previous.x + 24 >= labelPoint.x {
+                        if previous.x + 24 >= labelPoint.x && (previous.y + 2 > labelPoint.y || previous.y - 2 < labelPoint.y) {
                             labelPoint = CGPoint(x: labelPoint.x + 16, y: labelPoint.y)
                         } else {
                             labelPoint = CGPoint(x: labelPoint.x, y: labelPoint.y + lineHeight + 4)
