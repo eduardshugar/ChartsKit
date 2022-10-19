@@ -356,7 +356,7 @@ open class PieChartRenderer: NSObject, DataRenderer
             let lineHeight = valueFont.lineHeight
             
             let formatter = dataSet.valueFormatter
-            var previous: CGPoint = .zero
+//            var previous: CGPoint = .zero
             
             for j in 0 ..< dataSet.entryCount
             {
@@ -433,37 +433,40 @@ open class PieChartRenderer: NSObject, DataRenderer
                     let pt1 = CGPoint(
                         x: labelRadius * (1 + valueLineLength1) * sliceXBase + center.x,
                         y: labelRadius * (1 + valueLineLength1) * sliceYBase + center.y)
-
-                    if transformedAngle.truncatingRemainder(dividingBy: 360.0) >= 90.0 && transformedAngle.truncatingRemainder(dividingBy: 360.0) <= 270.0
-                    {
+                    
+                    let remainder = transformedAngle.truncatingRemainder(dividingBy: 360.0)
+                    
+                    if remainder >= 315 && remainder <= 360 || remainder >= 0 && remainder <= 45 {
                         pt2 = CGPoint(x: pt1.x - polyline2Length, y: pt1.y)
                         align = .center
-                        labelPoint = CGPoint(x: pt2.x - 5, y: pt2.y - lineHeight)
-                    }
-                    else
-                    {
+                        labelPoint = CGPoint(x: pt2.x + 5, y: pt2.y - lineHeight)
+                    } else if remainder >= 135 && remainder <= 225 {
                         pt2 = CGPoint(x: pt1.x + polyline2Length, y: pt1.y)
                         align = .center
-                        labelPoint = CGPoint(x: pt2.x + 5, y: pt2.y - lineHeight)
+                        labelPoint = CGPoint(x: pt2.x - 5, y: pt2.y - lineHeight)
+                    } else {
+                        pt2 = CGPoint(x: pt1.x + polyline2Length, y: pt1.y)
+                        align = .center
+                        labelPoint = CGPoint(x: pt2.x, y: pt2.y - lineHeight)
                     }
                                         
-                    let previousFrame = CGRect(x: previous.x, y: previous.y, width: 24, height: lineHeight)
-                    let currentFrame = CGRect(x: labelPoint.x, y: labelPoint.y, width: 24, height: lineHeight)
-
-                    if currentFrame.intersects(previousFrame) {
-                        if previous.x + 24 >= labelPoint.x && (previous.y + 2 > labelPoint.y || previous.y - 2 < labelPoint.y) {
-                            labelPoint = CGPoint(x: labelPoint.x + 16, y: labelPoint.y)
-                        } else {
-                            labelPoint = CGPoint(x: labelPoint.x, y: labelPoint.y + lineHeight + 4)
-                        }
-                    } else if j == 0,
-                              let last = dataSet.entryForIndex(dataSet.entryCount-1),
-                              last.y / yValueSum * 100.0 < 5,
-                              e.y / yValueSum * 100.0 < 5 {
-                        labelPoint = CGPoint(x: labelPoint.x + 20, y: labelPoint.y)
-                    }
-
-                    previous = labelPoint
+//                    let previousFrame = CGRect(x: previous.x, y: previous.y, width: 24, height: lineHeight)
+//                    let currentFrame = CGRect(x: labelPoint.x, y: labelPoint.y, width: 24, height: lineHeight)
+//
+//                    if currentFrame.intersects(previousFrame) {
+//                        if previous.x + 24 >= labelPoint.x && (previous.y + 2 > labelPoint.y || previous.y - 2 < labelPoint.y) {
+//                            labelPoint = CGPoint(x: labelPoint.x + 16, y: labelPoint.y)
+//                        } else {
+//                            labelPoint = CGPoint(x: labelPoint.x, y: labelPoint.y + lineHeight + 4)
+//                        }
+//                    } else if j == 0,
+//                              let last = dataSet.entryForIndex(dataSet.entryCount-1),
+//                              last.y / yValueSum * 100.0 < 5,
+//                              e.y / yValueSum * 100.0 < 5 {
+//                        labelPoint = CGPoint(x: labelPoint.x + 20, y: labelPoint.y)
+//                    }
+//
+//                    previous = labelPoint
 
                     DrawLine: do
                     {
@@ -508,7 +511,7 @@ open class PieChartRenderer: NSObject, DataRenderer
                                                           .foregroundColor: entryLabelColor ?? valueTextColor])
                         }
                     }
-                    else if drawXOutside
+                    else if drawXOutside///
                     {
                         if j < data.entryCount && pe?.label != nil
                         {
