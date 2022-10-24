@@ -37,47 +37,13 @@ open class YAxisRenderer: NSObject, AxisRenderer
             axis.isDrawLabelsEnabled
             else { return }
 
-        let xoffset = axis.xOffset
         let yoffset = axis.labelFont.lineHeight / 2.5 + axis.yOffset
-        
-        let dependency = axis.axisDependency
-        let labelPosition = axis.labelPosition
-        
-        let xPos: CGFloat
-        let textAlign: TextAlignment
-        
-        if dependency == .left
-        {
-            if labelPosition == .outsideChart
-            {
-                textAlign = .right
-                xPos = viewPortHandler.offsetLeft - xoffset
-            }
-            else
-            {
-                textAlign = .left
-                xPos = viewPortHandler.offsetLeft + xoffset
-            }
-        }
-        else
-        {
-            if labelPosition == .outsideChart
-            {
-                textAlign = .left
-                xPos = viewPortHandler.contentRight + xoffset
-            }
-            else
-            {
-                textAlign = .right
-                xPos = viewPortHandler.contentRight - xoffset
-            }
-        }
-        
+                
         drawYLabels(context: context,
-                    fixedPosition: xPos,
+                    fixedPosition: axis.xOffset,
                     positions: transformedPositions(),
                     offset: yoffset - axis.labelFont.lineHeight,
-                    textAlign: textAlign)
+                    textAlign: axis.labelAlignment)
     }
     
     open func renderAxisLine(context: CGContext)
