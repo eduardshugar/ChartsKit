@@ -485,7 +485,7 @@ open class BarChartRenderer: BarLineScatterCandleBubbleRenderer
                         
                         let rect = buffer[j]
                         
-                        let x = rect.origin.x + rect.size.width / 2.0
+                        let x = (rect.origin.x + rect.size.width / 2.0) + 8
                         
                         guard viewPortHandler.isInBoundsRight(x) else { break }
                         
