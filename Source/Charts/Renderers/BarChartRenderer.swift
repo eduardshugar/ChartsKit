@@ -485,7 +485,7 @@ open class BarChartRenderer: BarLineScatterCandleBubbleRenderer
                         
                         let rect = buffer[j]
                         
-                        let x = (rect.origin.x + rect.size.width / 2.0) + 8
+                        let x = rect.origin.x + rect.size.width / 2.0
                         
                         guard viewPortHandler.isInBoundsRight(x) else { break }
                         
@@ -509,7 +509,7 @@ open class BarChartRenderer: BarLineScatterCandleBubbleRenderer
                                     ? (rect.origin.y + posOffset)
                                     : (rect.origin.y + rect.size.height + negOffset),
                                 font: valueFont,
-                                align: .center,
+                                align: .left,
                                 color: dataSet.valueTextColorAt(j),
                                 anchor: CGPoint(x: 0.5, y: 0.5),
                                 angleRadians: angleRadians)

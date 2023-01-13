@@ -579,7 +579,7 @@ open class LineChartRenderer: LineRadarRenderer
                                                                   entry: e,
                                                                   dataSetIndex: i,
                                                                   viewPortHandler: viewPortHandler),
-                                         at: CGPoint(x: pt.x + 8.33,
+                                         at: CGPoint(x: pt.x,
                                                      y: pt.y - CGFloat(valOffset) - valueFont.lineHeight),
                                          align: .center,
                                          angleRadians: angleRadians,
