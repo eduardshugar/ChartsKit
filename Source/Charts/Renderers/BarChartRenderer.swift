@@ -507,7 +507,7 @@ open class BarChartRenderer: BarLineScatterCandleBubbleRenderer
                                 xPos: x,
                                 yPos: val >= 0.0
                                     ? (rect.origin.y + posOffset)
-                                    : (rect.origin.y + rect.size.height + negOffset),
+                                    : (rect.origin.y - rect.size.height - negOffset),
                                 font: valueFont,
                                 align: .left,
                                 color: dataSet.valueTextColorAt(j),
