@@ -368,7 +368,11 @@ open class BarChartRenderer: BarLineScatterCandleBubbleRenderer
 
         for j in buffer.indices
         {
-            let barRect = buffer[j]
+            var barRect = buffer[j]
+            if let entry = dataSet.entryForIndex(j), entry.y < 0 {
+                barRect = CGRect(x: barRect.origin.x, y: barRect.origin.y, width: barRect.width, height: 8)
+                _buffers[index][j] = barRect
+            }
             
             guard viewPortHandler.isInBoundsLeft(barRect.origin.x + barRect.size.width) else { continue }
             guard viewPortHandler.isInBoundsRight(barRect.origin.x) else { break }
